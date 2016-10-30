@@ -24,8 +24,22 @@ public class ValueTest {
         Assert.assertEquals(null, value.get());
 
     }
+
     @Test(expected = NullPointerException.class)
     public void nullLambda() throws Exception {
         value = new Value<>(null);
+    }
+
+    @Test
+    public void checkLaziness() throws Exception {
+        final int[] counter = {0};
+        value = new Value<>(() -> {
+            counter[0]++;
+            return 0;
+        });
+
+        value.get();
+        value.get();
+        Assert.assertEquals(1, counter[0]);
     }
 }
